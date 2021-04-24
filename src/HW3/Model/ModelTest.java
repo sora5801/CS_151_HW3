@@ -6,7 +6,7 @@ import static org.junit.Assert.*;
 public class ModelTest {
 
     @Test
-    public void testSetName(){
+    public void testSetValues(){
         Model model = new Model();
         model.setValues("10", "2", "6");
         assertEquals("10", model.getRedValue());
