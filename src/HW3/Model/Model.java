@@ -1,26 +1,30 @@
 package HW3.Model;
 
-import java.util.ArrayList;
 
 public class Model {
-    private String name = "default name";
-    private ArrayList<String> classes = new ArrayList<>();
 
-    public void setName(String name) {
-        if (name.length() > 0) {
-            this.name = name;
-        }
+    private String redValue;
+    private String greenValue;
+    private String blueValue;
+
+
+    public void setValues(String red, String green, String blue){
+        redValue = red;
+        greenValue = green;
+        blueValue = blue;
     }
 
-    public void addClass(String name) {
-        this.classes.add(name);
+    public String getRedValue(){
+        return this.redValue;
     }
 
-    public String getName() {
-        return name;
+    public String getGreenValue(){
+        return this.greenValue;
     }
 
-    public ArrayList<String> getClasses() {
-        return (ArrayList<String>) classes.clone();
+    public String getBlueValue(){
+        return this.blueValue;
     }
+
+
 }

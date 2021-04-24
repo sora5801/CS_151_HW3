@@ -28,19 +28,17 @@ public class View extends JFrame {
     JButton updateButton;
     JButton resetClassButton;
 
-    JLabel studentNameLabel;
-    JLabel allClassesLabel;
+    BarGraph redGraph;
+    BarGraph blueGraph;
+    BarGraph greenGraph;
 
+    String redValue;
+    String greenValue;
+    String blueValue;
 
-    public View(BlockingQueue<Message> queue, String name, ArrayList<String> classes) {
-       // this.setRootPaneCheckingEnabled(false);
-       // System.out.println("layout before is " + this.getLayout().toString());
-       // setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-       // System.out.println("layout after is " + this.getLayout().toString());
+    public View(BlockingQueue<Message> queue, String redValue, String greenValue, String blueValue) {
         this.queue = queue;
 
-        this.studentNameLabel = new JLabel(name);
-        this.allClassesLabel = new JLabel(classes.toString());
 
         this.redTextField = new JTextField(10);
         redTextField.setMaximumSize(redTextField.getPreferredSize());
@@ -56,9 +54,9 @@ public class View extends JFrame {
         displayPanel.setLayout(new BorderLayout());
 
 
-        BarGraph redGraph = new BarGraph(Color.RED,0, 250);
-        BarGraph blueGraph = new BarGraph(Color.BLUE, 0, 350);
-        BarGraph greenGraph = new BarGraph(Color.GREEN, 0, 450);
+        this.redGraph = new BarGraph(Color.RED,0, 250);
+        this.blueGraph = new BarGraph(Color.BLUE, 0, 350);
+        this.greenGraph = new BarGraph(Color.GREEN, 0, 450);
 
 
         redLabel = new JLabel("Red: ");
@@ -78,27 +76,15 @@ public class View extends JFrame {
         JPanel barPanel = new JPanel();
 
         updateButton.addActionListener(e -> {
-            String redValue = redTextField.getText();
-            String greenValue = greenTextField.getText();
-            String blueValue = blueTextField.getText();
-            if(Integer.parseInt(redValue) >= 0 && Integer.parseInt(greenValue) >= 0 &&
-            Integer.parseInt(blueValue) >= 0) {
+            String red = redTextField.getText();
+            String green = greenTextField.getText();
+            String blue = blueTextField.getText();
+            if(Integer.parseInt(red) >= 0 && Integer.parseInt(green) >= 0 &&
+            Integer.parseInt(blue) >= 0) {
                 try {
-                    Message msg1 = new UpdateMessage(redValue);
-                    Message msg2 = new UpdateMessage(greenValue);
-                    Message msg3 = new UpdateMessage(blueValue);
-                    queue.put(msg1);
-                    queue.put(msg2);
-                    queue.put(msg3);
-                    redGraph.setY(500 - 25 * Integer.parseInt(redValue));
-                    redGraph.setHeight(25 * Integer.parseInt(redValue));
-                    blueGraph.setY(500 - 25 * Integer.parseInt(blueValue));
-                    blueGraph.setHeight(25 * Integer.parseInt(blueValue));
-                    greenGraph.setY(500 - 25 * Integer.parseInt(greenValue));
-                    greenGraph.setHeight(25 * Integer.parseInt(greenValue));
-                    redBarLabel.repaint();
-                    greenBarLabel.repaint();
-                    blueBarLabel.repaint();
+                    Message msg = new UpdateMessage(red, green, blue);
+                    queue.put(msg);
+
                 } catch (InterruptedException exception) {
                     // do nothing
                 }
@@ -106,38 +92,14 @@ public class View extends JFrame {
         });
 
         resetClassButton.addActionListener(e -> {
-            String redValue = "0";
-            String greenValue = "0";
-            String blueValue = "0";
             try {
-                Message msg1 =  new ResetMessage(redValue);
-                Message msg2 = new ResetMessage(greenValue);
-                Message msg3 = new ResetMessage(blueValue);
-                queue.put(msg1);
-                queue.put(msg2);
-                queue.put(msg3);
-                redTextField.setText("0");
-                greenTextField.setText("0");
-                blueTextField.setText("0");
-                redGraph.setHeight(0);
-                blueGraph.setHeight(0);
-                greenGraph.setHeight(0);
-                redBarLabel.repaint();
-                greenBarLabel.repaint();
-                blueBarLabel.repaint();
+                Message msg =  new ResetMessage();
+                queue.put(msg);
             } catch (InterruptedException exception) {
                 // do nothing
             }
         });
 
-   //     this.add(studentNameLabel);
-     //   this.add(allClassesLabel);
-
-      //  this.setRootPaneCheckingEnabled(false);
-       // BoxLayout boxlayout = new BoxLayout(this, BoxLayout.Y_AXIS);
-      //  this.setLayout(boxlayout);
-
-       // barPanel.setLayout(new FlowLayout());
         barPanel.add(redBarLabel);
         barPanel.add(greenBarLabel);
         barPanel.add(blueBarLabel);
@@ -163,34 +125,41 @@ public class View extends JFrame {
         displayPanel.add(barPanel, BorderLayout.CENTER);
 
         this.add(displayPanel);
-        //this.add(controlPanel);
 
-
-       // this.add(redLabel);
-       // this.add(redTextField);
-        //this.add(greenLabel);
-       // this.add(greenTextField);
-       // this.add(blueLabel);
-       // this.add(blueTextField);
-       // this.add(updateButton);
-       // this.add(resetClassButton);
-       // this.add(barLabel);
-
-
-      //  setContentPane(new DrawPane());
 
         this.setSize(500, 500);
         this.setVisible(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
-
-
-    public void updateNameInView(String value) {
-        this.studentNameLabel.setText(value);
+    public void getValues(String red, String green, String blue){
+        this.redValue = red;
+        this.greenValue = green;
+        this.blueValue = blue;
     }
 
-    public void updateListOfClassesInView(ArrayList<String> classes) {
-        this.allClassesLabel.setText(classes.toString());
+
+    public void updateColor(){
+        redGraph.setY(500 - 25 * Integer.parseInt(redValue));
+        redGraph.setHeight(25 * Integer.parseInt(redValue));
+        blueGraph.setY(500 - 25 * Integer.parseInt(blueValue));
+        blueGraph.setHeight(25 * Integer.parseInt(blueValue));
+        greenGraph.setY(500 - 25 * Integer.parseInt(greenValue));
+        greenGraph.setHeight(25 * Integer.parseInt(greenValue));
+        redBarLabel.repaint();
+        greenBarLabel.repaint();
+        blueBarLabel.repaint();
+    }
+
+    public void resetColor(){
+        redTextField.setText("0");
+        greenTextField.setText("0");
+        blueTextField.setText("0");
+        redGraph.setHeight(0);
+        blueGraph.setHeight(0);
+        greenGraph.setHeight(0);
+        redBarLabel.repaint();
+        greenBarLabel.repaint();
+        blueBarLabel.repaint();
     }
 }

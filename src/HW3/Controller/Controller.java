@@ -27,16 +27,20 @@ public class Controller {
 
             if(message.getClass() == UpdateMessage.class) {
                 // button update was clicked
-                UpdateMessage nameMessage = (UpdateMessage) message;
-                model.setName(nameMessage.getName()); // update model
-                view.updateNameInView(model.getName()); // update view
+                UpdateMessage updateMessage = (UpdateMessage) message;
+                model.setValues(updateMessage.getRedNumber(),
+                        updateMessage.getGreenNumber(), updateMessage.getBlueNumber()); // update model
+                view.getValues(model.getRedValue(), model.getGreenValue(), model.getBlueValue());
+                view.updateColor();
             }
             else if(message.getClass() == ResetMessage.class) {
                 // button Reset was clicked
                 // update model and view
                 ResetMessage resetMessage = (ResetMessage) message;
-                model.addClass(resetMessage.getCourse());
-                view.updateListOfClassesInView(model.getClasses());
+                model.setValues(resetMessage.getRedNumber(),
+                        resetMessage.getGreenNumber(), resetMessage.getBlueNumber());
+                view.getValues(model.getRedValue(), model.getGreenValue(), model.getBlueValue());
+                view.resetColor();
             }
 
         }

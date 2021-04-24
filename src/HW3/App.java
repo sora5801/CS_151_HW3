@@ -15,7 +15,7 @@ public class App {
         BlockingQueue<Message> queue = new LinkedBlockingQueue<>();
 
         Model model = new Model();
-        View view = new View(queue, model.getName(), model.getClasses());
+        View view = new View(queue, model.getRedValue(), model.getGreenValue(), model.getBlueValue());
         Controller controller = new Controller(queue, model, view);
         controller.mainLoop();
     }

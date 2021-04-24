@@ -1,13 +1,23 @@
 package HW3.Controller;
 
 public class ResetMessage implements Message {
-    private String course;
 
-    public ResetMessage(String str) {
-        this.course = str;
+    public ResetMessage() {
+
     }
 
-    public String getCourse() {
-        return course;
+    @Override
+    public String getRedNumber() {
+        return "0";
+    }
+
+    @Override
+    public String getBlueNumber() {
+        return "0";
+    }
+
+    @Override
+    public String getGreenNumber() {
+        return "0";
     }
 }
